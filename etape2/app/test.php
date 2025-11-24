@@ -1,20 +1,31 @@
 <?php
-    $mysqli = new mysqli('data', 'monuser', 'password');
-    if (mysqli_connect_errno()) {
-        printf("Connect failed: %s\n", mysqli_connect_error());
+    // Connexion à MariaDB
+    $mysqli = new mysqli('DATA', 'monuser', 'password', 'mabase');
+
+    if ($mysqli->connect_errno) {
+        printf("Connect failed: %s\n", $mysqli->connect_error);
         exit();
     }
 
-	if ($mysqli->query("INSERT INTO mabase.matable (compteur) SELECT count(*)+1 FROM mabase.matable;") === TRUE) {
-	    printf("Count updated\n<br />", $result->num_rows);
-	}
+    // 1) ÉCRITURE (INSERT)
+    $insert = "INSERT INTO mabase.matable (compteur)
+               SELECT COUNT(*) + 1 FROM mabase.matable;";
 
-	if ($result = $mysqli->query("SELECT * FROM mabase.matable")) {
-	    printf("Count : %d\n<br />", $result->num_rows);
+    if ($mysqli->query($insert) === TRUE) {
+        echo "Count updated<br />";
+    } else {
+        echo "Erreur INSERT : " . $mysqli->error . "<br />";
+    }
 
-	    /* Libération du jeu de résultats */
-	    $result->close();
-	}
+    // 2) LECTURE (SELECT)
+    $result = $mysqli->query("SELECT * FROM mabase.matable");
+
+    if ($result) {
+        echo "Count : " . $result->num_rows . "<br />";
+        $result->close();
+    } else {
+        echo "Erreur SELECT : " . $mysqli->error . "<br />";
+    }
 
     $mysqli->close();
 ?>

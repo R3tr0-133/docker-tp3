@@ -7,7 +7,6 @@
         exit();
     }
 
-    // 1) ÉCRITURE (INSERT)
     $insert = "INSERT INTO mabase.matable (compteur)
                SELECT COUNT(*) + 1 FROM mabase.matable;";
 
@@ -17,7 +16,6 @@
         echo "Erreur INSERT : " . $mysqli->error . "<br />";
     }
 
-    // 2) LECTURE (SELECT)
     $result = $mysqli->query("SELECT * FROM mabase.matable");
 
     if ($result) {
